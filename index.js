@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -50,6 +50,51 @@ async function run() {
             res.send(result);
         });
 
+        //     const id = req.params.id;
+        //     const filter = { _id: new ObjectId(id) }
+        //     const options = { upsert: true };
+        //     const updatedUser = req.body;
+        //     const singleUser = {
+        //         $set: {
+        //             name: updatedUser.name,
+        //             email: updatedUser.email,
+        //             address: updatedUser.address
+        //         }
+        //     }
+        //     const result = await candidateCollection.updateOne(filter, singleUser, options);
+        //     res.send(result);
+
+        // });
+
+        app.put('/candidates/:id', async (req, res) => {
+            const id = req.params.id;
+            // Add validation for the id
+            if (!ObjectId.isValid(id)) {
+                return res.status(400).json({ error: 'Invalid candidate ID' });
+            }
+
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedUser = req.body;
+            const singleUser = {
+                $set: {
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    address: updatedUser.address
+                }
+            };
+            try {
+                const result = await candidateCollection.updateOne(filter, singleUser, options);
+                res.json(result);
+            } catch (error) {
+                console.error('Error updating candidate:', error);
+                res.status(500).json({ error: 'Error updating candidate' });
+            }
+        });
+
+
+
+
 
         app.get('/reviews', async (req, res) => {
             const result = await reviewCollection.find().toArray();
@@ -62,6 +107,8 @@ async function run() {
             const result = await reviewCollection.insertOne(review);
             res.send(result);
         });
+
+
 
 
 
