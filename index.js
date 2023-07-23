@@ -32,6 +32,17 @@ async function run() {
         const candidateCollection = client.db('allCandidate').collection('candidates');
 
 
+        app.get("/myCollege/:email", async (req, res) => {
+            const colleges = await candidateCollection
+                .find({
+                    email: req.params.email,
+                })
+                .toArray();
+            res.send(colleges);
+        });
+
+
+
         app.post('/candidates', async (req, res) => {
             const candidate = req.body;
             const result = await candidateCollection.insertOne(candidate);
