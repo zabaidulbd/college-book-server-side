@@ -30,6 +30,7 @@ async function run() {
         await client.connect();
 
         const candidateCollection = client.db('allCandidate').collection('candidates');
+        const reviewCollection = client.db("allCandidate").collection('reviews');
 
 
         app.get("/myCollege/:email", async (req, res) => {
@@ -48,6 +49,16 @@ async function run() {
             const result = await candidateCollection.insertOne(candidate);
             res.send(result);
         });
+
+
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
+        });
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
