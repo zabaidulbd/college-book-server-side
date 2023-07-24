@@ -31,7 +31,15 @@ async function run() {
 
         const candidateCollection = client.db('allCandidate').collection('candidates');
         const reviewCollection = client.db("allCandidate").collection('reviews');
+        const collegeCollection = client.db("allCandidate").collection('colleges');
 
+
+
+        app.get('/colleges', async (req, res) => {
+            const result = await collegeCollection.find().toArray();
+            res.send(result);
+
+        })
 
         app.get("/myCollege/:email", async (req, res) => {
             const colleges = await candidateCollection
