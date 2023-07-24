@@ -27,13 +27,13 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const candidateCollection = client.db('allCandidate').collection('candidates');
         const reviewCollection = client.db("allCandidate").collection('reviews');
         const collegeCollection = client.db("allCandidate").collection('colleges');
 
-
+        // college api for getting all college information
 
         app.get('/colleges', async (req, res) => {
             const result = await collegeCollection.find().toArray();
@@ -58,21 +58,8 @@ async function run() {
             res.send(result);
         });
 
-        //     const id = req.params.id;
-        //     const filter = { _id: new ObjectId(id) }
-        //     const options = { upsert: true };
-        //     const updatedUser = req.body;
-        //     const singleUser = {
-        //         $set: {
-        //             name: updatedUser.name,
-        //             email: updatedUser.email,
-        //             address: updatedUser.address
-        //         }
-        //     }
-        //     const result = await candidateCollection.updateOne(filter, singleUser, options);
-        //     res.send(result);
 
-        // });
+        //    for update
 
         app.put('/candidates/:id', async (req, res) => {
             const id = req.params.id;
